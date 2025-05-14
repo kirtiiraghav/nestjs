@@ -22,11 +22,10 @@ export class UserController {
   }
 
   @Get(':id') // define route param here
-  getUser(@Param('id') id: number) {
+  getUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.getUser(id);
   }
 
-  @Get(':userId')
   @Post()
   store(@Req() req: Request) {
     return req.body;
@@ -45,10 +44,10 @@ export class UserController {
     return this.userService.updateUser(id, name);
   }
 
-  @Patch(':userId')
-  update(@Req() req: Request, @Param() param: { userId: number }) {
-    return req.body;
-  }
+//   @Patch(':userId')
+//   update(@Req() req: Request, @Param() param: { userId: number }) {
+//     return req.body;
+//   }
 
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {

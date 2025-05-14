@@ -23,8 +23,7 @@ export class UserService {
     const { name, age } = createUserDto;
     const newUser = {
       id: this.users.length + 1,
-      name,
-      age,
+      ...createUserDto
     };
     this.users.push(newUser);
     return newUser;
