@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -32,8 +33,8 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body('name') name: string, @Body('age') age: number) {
-    return this.userService.createUser(name, age);
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
   @Patch(':id')
