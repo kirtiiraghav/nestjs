@@ -27,11 +27,6 @@ export class UserController {
   }
 
   @Post()
-  store(@Req() req: Request) {
-    return req.body;
-  }
-
-  @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }

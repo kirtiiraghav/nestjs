@@ -1,50 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Repository } from 'typeorm';
+import { User } from './entity/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
-  private users = [
-    { id: 1, name: 'User1', age: 20 },
-    { id: 2, name: 'User2', age: 20 },
-    { id: 3, name: 'User3', age: 20 },
-  ];
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
-  getUsers() {
-    return this.users;
+  //get all users data from database
+  getUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  getUser(id: number) {
-    const user =
-      this.users.find((user) => user.id === id) || `User ${id} doesn't exist`;
-    return user;
+  getUser(id: number): Promise<User | null> {
+    return this.userRepository.findOne({ where: { id } });
   }
 
   createUser(createUserDto: CreateUserDto) {
-    const { name, age } = createUserDto;
-    const newUser = {
-      id: this.users.length + 1,
-      ...createUserDto
-    };
-    this.users.push(newUser);
-    return newUser;
+    return this.userRepository.save(createUserDto);
   }
 
   updateUser(id: number, name: string) {
-    const user = this.users.find((user) => user.id === id);
-    if (!user) {
-      return 'User not found';
-    }
-    user.name = name;
-    return user;
+    return this.userRepository.update(id, {name}) // expects an object - this works because { name } is an object with the field name, which matches the field in your User entity.
   }
 
   delete(id: number) {
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
-      return 'User not found';
-    }
-
-    const deletedUser = this.users.splice(userIndex, 1);
-    return deletedUser;
+    return this.userRepository.delete(id);
   }
 }
